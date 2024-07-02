@@ -5,12 +5,22 @@ import http from "http";
 
 import { loadConfig } from './app/config/config';
 import { initDB } from './app/services/initDB';
-
+import { initPassport } from "./app/services/passport-jwt";
 import usersRoutes from "./app/routes/users";
+import { IUser } from './app/schema/User';
 
 loadConfig();
 const app = express();
 const router = express.Router();
+
+declare global {
+  namespace Express {
+    interface User extends Omit<IUser, "password"> {}
+    interface Request {
+      user?: User;
+    }
+  }
+}
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -20,8 +30,9 @@ const PORT = process.env.PORT || 5000;
 
 const initApp = async (): Promise<void> => {
     //connecting with DB
-    initDB();
-    
+    await initDB();
+    // passport init
+    initPassport();
     // set base path to /api
     app.use("/api", router);
     

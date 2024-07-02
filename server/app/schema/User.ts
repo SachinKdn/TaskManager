@@ -4,7 +4,6 @@ import { type BaseSchema } from "./index";
 import { hashPassword } from "../services/user";
 
 export enum UserRole {
-  MANAGER = "MANAGER",
   USER = "USER",
   ADMIN = "ADMIN",
 }
@@ -12,18 +11,20 @@ export enum UserRole {
 const Schema = mongoose.Schema;
 
 export interface IUser extends BaseSchema {
+  name: string;
   email: string;
-  active: boolean;
+  isActive: boolean;
   password: string;
-  blocked: boolean;
+  tasks: mongoose.Types.ObjectId[];
   role: UserRole;
 }
 
 const UserSchema = new Schema<IUser>(
   {
+    name: { type: String, default: "NewUser", required: true },
     email: { type: String, required: true, unique: true },
-    active: { type: Boolean, default: false },
-    blocked: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: false },
+    tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }],
     password: { type: String },
     role: { type: String, enum: UserRole, default: UserRole.USER },
   },
