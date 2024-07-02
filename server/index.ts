@@ -1,5 +1,4 @@
 import express , { type Express, type Request, type Response }from 'express';
-import dotenv from 'dotenv';
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import http from "http";
@@ -27,7 +26,7 @@ const initApp = async (): Promise<void> => {
     app.use("/api", router);
     
     // routes
-    router.use("/users", usersRoutes);
+    router.use("/users", usersRoutes);  
 
     app.get("/", (req: Request, res: Response) => {
         res.send({ status: "Sachin Jiii" });
