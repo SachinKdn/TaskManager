@@ -2,7 +2,7 @@ import express , { type Express, type Request, type Response }from 'express';
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import http from "http";
-
+import cors from "cors";
 import { loadConfig } from './app/config/config';
 import { initDB } from './app/services/initDB';
 import { initPassport } from "./app/services/passport-jwt";
@@ -21,6 +21,8 @@ declare global {
     }
   }
 }
+// Use CORS middleware
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

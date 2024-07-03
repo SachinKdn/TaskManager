@@ -42,6 +42,8 @@ const isValidPassword = async function (value: string, password: string) {
             passwordField: "password",
           },
           async (email, password, done) => {
+            console.log("Login req in login passport");
+            console.log(email);
             try {
               const user : IUser | null = await userService.getUserByEmail(email);
               if (user == null) {
@@ -74,6 +76,7 @@ const isValidPassword = async function (value: string, password: string) {
       export const createUserTokens = (user: Omit<IUser, "password">) => {
         const jwtSecret = process.env.JWT_SECRET ?? "";
         const token = jwt.sign(user, jwtSecret);
+        console.log("Token created successfully");
         return { accessToken: token, refreshToken: "" };
       };
   

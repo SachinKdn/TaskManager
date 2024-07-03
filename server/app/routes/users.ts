@@ -18,6 +18,8 @@ router.post(
   "/login",
   passport.authenticate("login", { session: false }),
   expressAsyncHandler(async (req, res, next) => {
+    console.log("Login Request Occured in users.ts.")
+    console.log(req.user);
     res.send(
       createResponse({ ...createUserTokens(req.user!), user: req.user })
     );
