@@ -24,6 +24,7 @@ const isValidPassword = async function (value: string, password: string) {
           jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         },
         async (token, done) => {
+          console.log("JWT PASSPORT>>>>>>")
             try {
             done(null, token);
           } catch (error) {
@@ -74,6 +75,7 @@ const isValidPassword = async function (value: string, password: string) {
 
 
       export const createUserTokens = (user: Omit<IUser, "password">) => {
+       console.log(user);
         const jwtSecret = process.env.JWT_SECRET ?? "";
         const token = jwt.sign(user, jwtSecret);
         console.log("Token created successfully");

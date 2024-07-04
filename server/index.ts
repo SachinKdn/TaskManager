@@ -7,6 +7,7 @@ import { loadConfig } from './app/config/config';
 import { initDB } from './app/services/initDB';
 import { initPassport } from "./app/services/passport-jwt";
 import usersRoutes from "./app/routes/users";
+import tasksRoutes from "./app/routes/tasks";
 import { IUser } from './app/schema/User';
 
 loadConfig();
@@ -40,6 +41,7 @@ const initApp = async (): Promise<void> => {
     
     // routes
     router.use("/users", usersRoutes);  
+    router.use("/tasks", tasksRoutes);  
 
     app.get("/", (req: Request, res: Response) => {
         res.send({ status: "Sachin Jiii" });

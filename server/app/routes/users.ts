@@ -6,8 +6,9 @@ import expressAsyncHandler from "express-async-handler";
 import * as userService from "../services/user";
 import { createResponse } from "../helper/response";
 import { createUserTokens, decodeToken } from "../services/passport-jwt";
-
+import { omit } from 'lodash';
 import passport from "passport";
+import { checkAdmin } from '../services/checkAdmin';
 
 
 
@@ -28,6 +29,7 @@ router.post(
 router.get("/me",
   passport.authenticate("jwt", { session: false }),
   expressAsyncHandler(async (req, res) => {
+  console.log(req);
   res.send(createResponse(req.user, "User details feteched successfully!"));
 }))
 router.put(
@@ -43,9 +45,18 @@ router.put(
 router.post(
     "/register",
     expressAsyncHandler(async (req, res) => {
-      const { email, password, role } = req.body as IUser;
-      const user = await userService.createUser({ email, password, role });
-      res.send(createResponse(user, "User created successfully!"));
+      const {name, email, password, role } = req.body as IUser;
+      const user = await userService.createUser({ name, email, password, role });
+    
+    const { password: _p, ...result } = user;
+    const userWithoutPassword = omit(user.toObject(), ['password']);
+    const tokens = createUserTokens(result);
+    res.send(
+      createResponse({
+        ...tokens,
+        user: userWithoutPassword,
+      })
+    );
     })
   );
 
@@ -56,6 +67,8 @@ router.get("/demo",(req: Request, res: Response) => {
 
   router.post(
     "/register-with-link",
+    passport.authenticate("jwt", { session: false }),
+    checkAdmin,
     expressAsyncHandler(async (req, res) => {
       const { email, role } = req.body as IUser;
       const user = await userService.createUserAndSendLink({

@@ -20,11 +20,12 @@ export const createUserAndSendLink = async (data: {
 }
 
 export const createUser = async (data: {
+  name: string;
   email: string;
   role: UserRole;
   password: string;
 }) => {
-  const user = await User.create({ ...data, active: true });
+  const user = await User.create({ ...data, isActive: true });
   return user;
 };
 

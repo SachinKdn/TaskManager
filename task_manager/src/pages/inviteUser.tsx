@@ -13,14 +13,14 @@ import './inviteUser.css';  // Import the CSS file
 
 interface IFormInput {
     email: string;
-    role: 'user' | 'admin';
+    role: 'USER' | 'ADMIN';
   }
 
 
 //yup schema creation
 const inputSchema = yup.object().shape({
     email: yup.string().required("Email is a required field."),
-    role: yup.string().oneOf(['user', 'admin'], 'Invalid role').required('Role is required'),
+    role: yup.string().oneOf(['USER', 'ADMIN'], 'Invalid role').required('Role is required'),
 
 })
 
@@ -48,8 +48,8 @@ const InviteUser : React.FC= () => {
       <div>
         <label htmlFor="role">Role</label>
         <select id="role" {...register('role')} defaultValue="user">
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
+          <option value="USER">User</option>
+          <option value="ADMIN">Admin</option>
         </select>
         {errors.role && <p>{errors.role.message}</p>}
       </div>
