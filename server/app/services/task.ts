@@ -8,9 +8,14 @@ export const createTask = async(data:{
     priority: string;
     stage: string;
     estTime: Number;
-    by?: string; 
+    assignedTo?: string; 
     // by: mongoose.Types.ObjectId; 
 }) => {
     const task = await Tasks.create({...data});
     return task;
 }
+
+export const getTaskById = async (id: string) => {
+    const task = await Tasks.findById(id).lean();
+    return task;
+  };

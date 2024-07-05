@@ -10,6 +10,11 @@ interface AuthState {
   user: object;
 }
 
+interface UsersSlice {
+  isLoading: boolean;
+  users: object[];
+}
+
 // Define the initial state using that type
 const initialState: AuthState = {
   accessToken: "",
@@ -18,6 +23,10 @@ const initialState: AuthState = {
   loading: true,
   user : {}
 };
+const initialStateUsers: UsersSlice = {
+  isLoading: true,
+  users : []
+}
 
 export const authSlice = createSlice({
   name: "auth",
@@ -45,6 +54,21 @@ export const authSlice = createSlice({
   },
 });
 
+export const usersSlice = createSlice({
+  name: "users",
+  initialState : initialStateUsers,
+  reducers:{
+    setIsLoading: (state, action: PayloadAction<{ loading: boolean }>) => {
+      state.isLoading = action.payload.loading;
+    },
+    setUsers: (state,action: PayloadAction<{users: object[]}>)=>{
+        state.users = action.payload.users;
+    },
+  }
+})
+
 export const { setLoading, setTokens, resetTokens ,setUser} = authSlice.actions;
+
+export const { setIsLoading ,setUsers} = usersSlice.actions;
 
 export default authSlice.reducer;

@@ -20,7 +20,7 @@ export interface ITask extends BaseSchema{
     priority: Priority;
     date: Date;
     stage: Stage;
-    by: string;
+    assignedTo: string;
     // by: mongoose.Types.ObjectId;
     estTime: Number;
     startTime: Date;
@@ -34,7 +34,8 @@ const TaskSchema = new Schema<ITask>({
     date: { type: Date, default: new Date() },
     stage: {type: String, enum: Stage, default: Stage.TODO},
     // by: {type: Schema.Types.ObjectId,required: true, ref: 'User'},
-    by: {type : String, required: true},
+    
+    assignedTo: {type : String, required: true},
     estTime: {type: Number, required: true},
     startTime: {type: Date},
     endTime: {type: Date},

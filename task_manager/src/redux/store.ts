@@ -1,10 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { createdApi } from "./api";
 import  
 // authReducer, 
-{ authSlice }  from "./reducer";
+{ authSlice , usersSlice}  from "./reducer";
 import authReducer from "./reducer";
+
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
@@ -13,13 +14,20 @@ const persistConfig = {
     key: "auth",
     storage,
   };
-  
+  const persistConfigForUsersReducer = {
+    key: "users",
+    storage,
+  }
+  const usersReducer = usersSlice.reducer;
   const persistedAuthReducer = persistReducer(persistConfig, authReducer);
+
+  const persistedUsersReducer = persistReducer(persistConfigForUsersReducer, usersSlice.reducer)
 
 export const store = configureStore({
   reducer: {
     //   auth: authReducer, //our own reducer
         auth: persistedAuthReducer,
+        users : persistedUsersReducer,
     //   [authSlice.name]: authSlice.reducer, //our own reducer
 
     //   myapi : createdApi.reducer,//we add createdApi here as a reducer

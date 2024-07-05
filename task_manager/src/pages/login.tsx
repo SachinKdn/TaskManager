@@ -13,6 +13,8 @@ import { AppDispatch } from "../redux/store";
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { Box, Button, Typography, TextField, Link } from '@mui/material';
+
 enum UserRole {
     USER = "USER",
     ADMIN = "ADMIN",
@@ -46,6 +48,7 @@ const Login : React.FC= () => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user  = useSelector((state: RootState) => state.auth.user) as IUser;
   const navigate = useNavigate();
+
   const [userLogin, { data, error, isLoading }] = useUserLoginMutation();
   const dispatch = useDispatch<AppDispatch>();
     const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>({
@@ -55,6 +58,7 @@ const Login : React.FC= () => {
     //   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     //     console.log(data);
     //   };
+    
 
       const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         try {
@@ -67,6 +71,7 @@ const Login : React.FC= () => {
           console.log(result.data.data.user.role);
           dispatch(setUser({user: result.data.data.user}));
           dispatch(setTokens({accessToken: result.data.data.accessToken, refreshToken: result.data.data.refreshToken }))
+          dispatch(setLoading({loading : false}));
           if(result.data.data.user.role === "ADMIN"){
             console.log("Logged by ADMIN")
             navigate("/admin")
@@ -86,7 +91,7 @@ const Login : React.FC= () => {
             navigate('/admin');
           }else{
             console.log("Logged USER")
-            navigate('/profile');
+            navigate('/');
           }
            // Redirect to Home if not authenticated
       }
@@ -109,7 +114,18 @@ const Login : React.FC= () => {
       
       
       <button type="submit">Login</button>
+
+      <Link
+          onClick={() => navigate('/signup')}
+          sx={{ mt: "10px",
+            cursor: "pointer"
+           }}
+        >
+          Create a new account
+        </Link>
     </form>
+
+    
   </div>
   </div>
   )

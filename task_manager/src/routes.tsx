@@ -7,6 +7,9 @@ import Profile from "./pages/profile";
 import InviteUser from "./pages/inviteUser";
 import SignUp from "./pages/signup";
 import DashboardAdmin from "./pages/dashboard";
+import AssignTask from "./pages/assignTask";
+import UserCard from "./Layout/userCard";
+import AllUsers from "./pages/allUsers";
 
 export const router = createBrowserRouter([
     {
@@ -25,8 +28,18 @@ export const router = createBrowserRouter([
         errorElement:<Error/>
     },
     {
+        path:"/assignTask",
+        element:<AssignTask/>,
+        errorElement:<Error/>
+    },
+    {
         path:"/inviteUser",
         element:<InviteUser/>,
+        errorElement:<Error/>
+    },
+    {
+        path:"/users",
+        element:<AllUsers/>,
         errorElement:<Error/>
     },
     {

@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Box, Hidden, Typography } from "@mui/material";
 
 import TaskIcon from '@mui/icons-material/Task';
@@ -19,6 +19,15 @@ import ListIcon from '@mui/icons-material/List';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
+
+import React from "react";
+import { useDispatch } from 'react-redux';
+import { setLoading, setTokens, resetTokens ,setUser } from '../redux/reducer'
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { AppDispatch } from "../redux/store";
+import PersonIcon from '@mui/icons-material/Person';
+
 const navLinks = [
   {
     name: "Home",
@@ -31,8 +40,8 @@ const navLinks = [
     link: "/admin",
   },
   {
-    name: "Profile",
-    icon: SettingsIcon,
+    name: "My Profile",
+    icon: PersonIcon,
     link: "/profile",
   },
   {
@@ -69,6 +78,7 @@ const navLinks = [
     name: "To Do",
     icon: ListIcon,
     link: "/todo",
+    
   },
   {
     name: "Logout",
@@ -79,8 +89,37 @@ const navLinks = [
 
 
 
+export interface IUser {
+  _id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  name: string;
+  email: string;
+  isActive: boolean;
+  password: string;
+  tasks: object[];
+  role: string;
+}
 const Sidebar = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const user  = useSelector((state: RootState) => state.auth.user) as IUser;
+  const dispatch = useDispatch<AppDispatch>();
+
+
+  const handleLogout = ()=>{
+    console.log("Log Out.....");
+    localStorage.clear();
+    dispatch(resetTokens());
+  }
+
+  React.useEffect(()=>{
+    if(!isAuthenticated){
+      navigate('/login')
+    }
+  },[isAuthenticated])
+
   return (
     <Box
       sx={{
@@ -131,7 +170,45 @@ const Sidebar = () => {
           gap: 2,
         }}
       >
-        {navLinks.map((item) => (
+        {navLinks.map((item) => {
+          
+          if ((item.name === 'Dashboard' ||  item.name === 'Assign Task' || item.name === 'All Users' || item.name === 'Invite New User') && user.role === "USER" ) {
+            return null; 
+          }
+
+          if ((item.name === 'Home' ||  item.name === 'Add Task' || item.name === 'Completed' || item.name === 'To Do' || item.name === 'In Progress' ) && user.role === "ADMIN" ) {
+            return null; 
+          }
+           if(item.name === 'Logout'){
+            return (
+            
+              <Link
+                key={item.name}
+                to={item.link}
+                style={{ textDecoration: "none" }}
+                onClick={handleLogout}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    color: "white",
+                    textDecoration: "none",
+                  }}>
+                  <item.icon />
+                  <Hidden mdDown>
+                    <Typography variant="h5"
+                      component="h6"
+                      fontWeight={400}
+                      fontSize={15}>{item.name}</Typography>
+                  </Hidden>
+                </Box>
+              </Link>
+            )
+           }
+          return (
+            
           <Link
             key={item.name}
             to={item.link}
@@ -144,20 +221,7 @@ const Sidebar = () => {
                 gap: 2,
                 color: "white",
                 textDecoration: "none",
-              }}
-            >
-              {/* <img
-                  src={item.icon}
-                  alt={item.name}
-                  style={{
-                    width: "18px",
-                    filter: `${
-                      pathname === item.link
-                        ? "invert(58%) sepia(14%) saturate(3166%) hue-rotate(215deg) brightness(91%) contrast(87%)"
-                        : "invert(84%)"
-                    }`,
-                  }}
-                /> */}
+              }}>
               <item.icon />
               <Hidden mdDown>
                 <Typography variant="h5"
@@ -167,7 +231,7 @@ const Sidebar = () => {
               </Hidden>
             </Box>
           </Link>
-        ))}
+        )})}
       </Box>
     </Box>
   )

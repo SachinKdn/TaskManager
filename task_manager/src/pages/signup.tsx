@@ -13,6 +13,7 @@ import { AppDispatch } from "../redux/store";
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { Link } from "@mui/material";
 enum UserRole {
     USER = "USER",
     ADMIN = "ADMIN",
@@ -91,7 +92,7 @@ const SignUp : React.FC= () => {
   return (
     <div className="loginbox">
     <div className="login-container">
-    <h2>Login</h2>
+    <h2>Signup</h2>
     <form onSubmit={handleSubmit(onSubmit)}>
         <div>
         <label htmlFor="name">Username</label>
@@ -118,6 +119,14 @@ const SignUp : React.FC= () => {
       </div>
       
       <button type="submit">SignUp</button>
+      <Link
+          onClick={() => navigate('/login')}
+          sx={{ mt: "10px",
+            cursor: "pointer"
+           }}
+        >
+          Already have an account
+        </Link>
     </form>
   </div>
   </div>

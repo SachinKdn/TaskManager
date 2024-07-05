@@ -11,6 +11,7 @@ import tasksRoutes from "./app/routes/tasks";
 import { IUser } from './app/schema/User';
 
 loadConfig();
+
 const app = express();
 const router = express.Router();
 

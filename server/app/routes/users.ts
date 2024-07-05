@@ -1,7 +1,7 @@
 import { hashPassword } from "./../services/user";
 import createHttpError from "http-errors";
 import express , { type Express, type Request, type Response }from 'express';
-import { type IUser } from "../schema/User";
+import User, { type IUser } from "../schema/User";
 import expressAsyncHandler from "express-async-handler";
 import * as userService from "../services/user";
 import { createResponse } from "../helper/response";
@@ -9,6 +9,7 @@ import { createUserTokens, decodeToken } from "../services/passport-jwt";
 import { omit } from 'lodash';
 import passport from "passport";
 import { checkAdmin } from '../services/checkAdmin';
+import Tasks from "../schema/Tasks";
 
 
 
@@ -30,7 +31,8 @@ router.get("/me",
   passport.authenticate("jwt", { session: false }),
   expressAsyncHandler(async (req, res) => {
   console.log(req);
-  res.send(createResponse(req.user, "User details feteched successfully!"));
+  const user = await User.findById(req.user?._id).select("-password");
+  res.send(createResponse(user, "User details feteched successfully!"));
 }))
 router.put(
   "/:id",
@@ -82,7 +84,7 @@ router.get("/demo",(req: Request, res: Response) => {
   //set the new password for newuser
   router.post(
     "/set-new-password/:token",
-    expressAsyncHandler(async (req, res) => {
+    expressAsyncHandler(async (req: Request, res: Response): Promise<void> => {
       const { password, name } = req.body as IUser;
       const decode = decodeToken(req.params.token);
       if (!decode || !decode._id) {
@@ -109,4 +111,27 @@ router.get("/demo",(req: Request, res: Response) => {
       res.send(createResponse(user, "Password updated successfully!"));
     })
   );
+
+  router.get("/allUsers",
+    passport.authenticate("jwt", { session: false }),
+    checkAdmin,
+    expressAsyncHandler(async (req: Request, res: Response): Promise<void> => {
+      
+      const users = await User.find().select("-password");
+      console.log(users);
+      res.send(createResponse(users, "Reset password link sent successfully!"));
+    })
+  )
+  router.get("/mytasks",
+    passport.authenticate("jwt", { session: false }),
+    checkAdmin,
+    expressAsyncHandler(async (req: Request, res: Response): Promise<void>=> {
+      const userId = req.user?._id;
+      const tasks = await Tasks.find({by: userId});
+      console.log(tasks);
+      res.send(createResponse(tasks));
+    })
+  )
+  
+  
 export default router;
