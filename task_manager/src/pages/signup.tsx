@@ -67,20 +67,19 @@ const SignUp : React.FC= () => {
         try {
           dispatch(setLoading({loading : true}));
           console.log(data);
-          const result = await userRegister(data)
-        //   .unwrap();
-        localStorage.setItem('token', result.data.data.accessToken);
-          console.log("Signup successful:", result);
-          console.log(result.data.data.user);
-          dispatch(setUser({user: result.data.data.user}));
-          dispatch(setTokens({accessToken: result.data.data.accessToken, refreshToken: result.data.data.refreshToken }))
-          if(result.data.data.user.role == "ADMIN"){
+          const result = await userRegister(data).unwrap();
+          console.log("Signup successful:", result); 
+        localStorage.setItem('token', result.data.accessToken);
+          console.log(result.data.user);
+          dispatch(setUser({user: result.data.user}));
+          dispatch(setTokens({accessToken: result.data.accessToken, refreshToken: result.data.refreshToken }))
+          if(result.data.user.role == "ADMIN"){
             navigate("/admin")
           }
           navigate('/');
           // Handle successful login (e.g., store tokens, redirect user)
         } catch (err) {
-          console.error("Login failed:", err);
+          console.error("Signup failed:", err);
         }
       };
       React.useEffect(() => {

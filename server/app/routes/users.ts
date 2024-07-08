@@ -124,11 +124,19 @@ router.get("/demo",(req: Request, res: Response) => {
   )
   router.get("/mytasks",
     passport.authenticate("jwt", { session: false }),
+    expressAsyncHandler(async (req: Request, res: Response): Promise<void>=> {
+      console.log("Request Reached to the /mytasks.")
+      const userId = req.user?._id;
+      const tasks = await Tasks.find({assignedTo: userId});
+      res.send(createResponse(tasks));
+    })
+  )
+  router.get("/:id",
+    passport.authenticate("jwt", { session: false }),
     checkAdmin,
     expressAsyncHandler(async (req: Request, res: Response): Promise<void>=> {
-      const userId = req.user?._id;
-      const tasks = await Tasks.find({by: userId});
-      console.log(tasks);
+      const userId = req.params.id;
+      const tasks = await Tasks.find({assignedTo: userId});
       res.send(createResponse(tasks));
     })
   )

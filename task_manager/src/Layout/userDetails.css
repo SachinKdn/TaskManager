@@ -1,0 +1,16 @@
+.activeClass{
+    color: rgb(87, 165, 42);
+}
+
+.inActiveClass{
+    color: brown; 
+}
+
+.taskCard{
+    border: 1px solid #c3c3c7;
+    border-radius: 15px;
+    padding: 12px;
+    margin: 10px 5px;
+    box-shadow: 1px 1px 17px 0px #959595;
+    background-color: #e5eef4;
+}

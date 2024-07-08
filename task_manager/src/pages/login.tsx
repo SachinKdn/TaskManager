@@ -19,6 +19,13 @@ enum UserRole {
     USER = "USER",
     ADMIN = "ADMIN",
   }
+  export interface ITask{
+    title: string,
+    desc: string,
+    priority: string,
+    stage: string,
+    estTime: number
+  }
   export interface IUser {
     _id: string;
     createdAt: Date;
@@ -27,7 +34,7 @@ enum UserRole {
     email: string;
     isActive: boolean;
     password: string;
-    tasks: object[];
+    tasks: ITask[];
     role: string;
   }
 interface IFormInput {

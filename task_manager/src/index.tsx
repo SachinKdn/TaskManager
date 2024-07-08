@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 // import {ApiProvider} from "@reduxjs/toolkit/query/react";
 // import { createdApi } from './redux/api';
 import { PersistGate } from 'redux-persist/integration/react';
+import { ToastContainer } from 'react-toastify';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -16,6 +18,7 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         {/* <ApiProvider api = {createdApi}> */}
+        <ToastContainer />
         <App />
         {/* </ApiProvider> */}
       </PersistGate>

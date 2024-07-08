@@ -13,6 +13,7 @@ interface AuthState {
 interface UsersSlice {
   isLoading: boolean;
   users: object[];
+  tasks: object[];
 }
 
 // Define the initial state using that type
@@ -25,7 +26,8 @@ const initialState: AuthState = {
 };
 const initialStateUsers: UsersSlice = {
   isLoading: true,
-  users : []
+  users : [],
+  tasks: []
 }
 
 export const authSlice = createSlice({
@@ -64,11 +66,14 @@ export const usersSlice = createSlice({
     setUsers: (state,action: PayloadAction<{users: object[]}>)=>{
         state.users = action.payload.users;
     },
+    setTasks: (state,action: PayloadAction<{tasks: object[]}>)=>{
+      state.tasks = action.payload.tasks;
+    }
   }
 })
 
 export const { setLoading, setTokens, resetTokens ,setUser} = authSlice.actions;
 
-export const { setIsLoading ,setUsers} = usersSlice.actions;
+export const { setIsLoading ,setUsers, setTasks} = usersSlice.actions;
 
 export default authSlice.reducer;

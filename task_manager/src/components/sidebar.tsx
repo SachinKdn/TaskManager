@@ -47,7 +47,7 @@ const navLinks = [
   {
     name: "Assign Task",
     icon: TaskIcon,
-    link: "/assignTask",
+    link: "/addtask",
   },
   {
     name: "Add Task",

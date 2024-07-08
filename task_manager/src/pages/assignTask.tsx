@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import Layout from '../Layout';
 import { useCreateTaskMutation } from "../redux/api";
-import { createTask } from '../../../server/app/services/task';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
@@ -49,6 +48,8 @@ type Task = {
     
  const AssignTask: React.FC = () => {
   const users = useSelector((state: RootState) => state.users.users) as IUser[];
+
+  const user = useSelector((state: RootState) => state.auth.user) as IUser;
   const [createTask, { data, error, isLoading }] = useCreateTaskMutation();
   const navigate = useNavigate();
   const [task, setTask] = useState<Task>({
@@ -79,6 +80,13 @@ type Task = {
   };
 
   const handleSubmit = async () => {
+    if(user.role === "USER"){
+      console.log("User role is USER")
+      setTask({
+        ...task,
+        assignedTo: user._id,
+      });
+    }
     console.log("Task assigned to - " + task.assignedTo);
     const newErrors = {
       title: task.title ? '' : 'Title is required',
@@ -94,7 +102,7 @@ type Task = {
     console.log('Task Assigned:', task);
     const result = await createTask(task).unwrap();
     console.log("Creation successful:", result);
-    navigate("/admin")
+    navigate("/")
     }
   };
 
@@ -127,7 +135,7 @@ type Task = {
           // error={!!errors.desc}
           // helperText={errors.desc}
         />
-       
+       {user && user.role === "ADMIN" ? 
        <FormControl fullWidth margin="normal" error={!!errors.assignedTo}>
           <InputLabel id="assignedTo-label">Assign To</InputLabel>
           <Select
@@ -137,7 +145,7 @@ type Task = {
             value={task.assignedTo}
             onChange={handleChange}
           >
-            {users.map((user) => (
+            {users.filter(user => user.isActive).map((user) => (
               <MenuItem key={user._id} value={user._id}>
                 {user.name}
               </MenuItem>
@@ -145,6 +153,7 @@ type Task = {
           </Select>
           <FormHelperText>{errors.assignedTo}</FormHelperText>
         </FormControl>
+        :""}
         <TextField
           label="Estimation Hours"
           type="number"

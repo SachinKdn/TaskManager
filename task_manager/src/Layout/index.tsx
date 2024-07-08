@@ -26,9 +26,17 @@ const Layout = ({ children }: LayoutProps) => {
     >
       <Sidebar />
       <Box sx={{ width: "100%",
-      height: "inherit"
-        // overflowY: "scroll",
+        // height: "inherit",
+        height: "unset",
+        overflowY: "scroll",
+        margin: "10px",
         // border: "2px solid black" 
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+        msOverflowStyle: "none",  // IE and Edge
+        scrollbarWidth: "none",  // Firefox
+
         }}>{children}</Box>
     </Box>
   );

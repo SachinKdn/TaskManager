@@ -44,13 +44,15 @@ export const createdApi = createApi({
       })
     }),
     getAllUsers: builder.mutation({
-      query: (id) => "api/users/allUsers"
-      // query: () =>({
-      //   url: "api/users/allUsers",
-      //   method: 'GET'
-      // })
+      query: (id) => "api/users/allUsers"     
+    }),
+    getUserTaskById: builder.mutation({
+      query: (id) => `api/users/${id}`
+    }),
+    getMyTasks: builder.mutation({
+      query: (id) => `api/users/mytasks`
     })
   }),
 });
 
-export const { useUserLoginMutation , useUserRegisterMutation, useCreateTaskMutation, useGetAllUsersMutation} = createdApi;
+export const { useUserLoginMutation , useUserRegisterMutation, useCreateTaskMutation, useGetAllUsersMutation , useInviteUserMutation, useGetUserTaskByIdMutation , useGetMyTasksMutation} = createdApi;

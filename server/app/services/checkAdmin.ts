@@ -6,7 +6,6 @@ export const checkAdmin = async (req: Request, res: Response, next: NextFunction
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
-  const user = req.user as IUser;
   const currUser = await User.findById(req.user._id);
   if (!currUser) {
     return res.status(404).json({ message: 'User not found' });

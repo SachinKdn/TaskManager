@@ -1,23 +1,51 @@
 import { Box, Typography } from "@mui/material";
 import React from 'react'
 import Link from '@mui/material/Link';
+import { Link as RLink } from 'react-router-dom';
 import { Avatar } from 'antd';
 import Layout from ".";
 import "./UserCard.css"
-const UserCard = () => {
+import { IUser } from "../pages/login";
+interface UserCardProps {
+    id: string;
+    key: string;
+    user: IUser;
+  }
+const UserCard : React.FC<UserCardProps> = ({id, key, user}) => {
     return (
+    <RLink 
+        key={key}
+        to={`${id}`}
+        state={{ user }}
+
+        // component="button"
+        // variant="body2"
+        // onClick={() => {
+        //     console.info("I'm a button.");
+        // }}
+        style={{
+            textDecoration: "none",
+            fontWeight: 500,
+            fontFamily: "Poppins",
+            fontSize: "1rem",
+            color: "#161d2f"
+        }}
+        >
             <Box sx={{
                 // height: "50%",
                 minWidth: {
                     lg: "280px",
                     md:"150px"
                 },
-                border: "1px solid black",
+                border: "0.5px solid #b7b6b6;",
                 margin: "10px",
                 display: "flex",
                 flexDirection: "column",
                 padding: "2px",
-                borderRadius: "10px"
+                borderRadius: "10px",
+                boxShadow: "1px 1px 5px 2px #959595",
+                backgroundColor: "#e5eef4",
+                cursor:"pointer"
             }}>
                 <Box sx={{
                     // height: "30%",
@@ -26,16 +54,16 @@ const UserCard = () => {
                 padding: "2px",
                 alignItems: "center",
                 justifyContent: "space-between",
-                borderBottom: "1px solid black"
+                borderBottom: "0.5px solid #9c9c9c"
             }}>
-                    <div className="status"></div>
+                    <div className={user.isActive ? "activeStatus" : "inActiveStatus"} ></div>
                     <Box sx={{
                 display: "flex",
                 padding: "5px",
                 borderRadius: "10px",
                 margin: "0",
                 gap: 1,
-                alignItems: "end"
+                // alignItems: "end"
             }}>
                         <Link
                             component="button"
@@ -45,19 +73,21 @@ const UserCard = () => {
                             }}
                             sx={{
                                 textDecoration: "none",
-                                fontWeight: 600,
-                                fontFamily: "inherit",
-                                fontSize: "1.2rem",
+                                fontWeight: 500,
+                                fontFamily: "Poppins",
+                                fontSize: "1rem",
                                 color: "#161d2f"
                             }}
                         >
-                            Sachin Kadian
+                            {user.name}
                         </Link>
-                        <div>
+                        <div style={{border:"0.5px solid #b0a6a6",
+                            borderRadius:"50%"
+                        }}>
                             <Avatar
                                 // onClick={() => console.log(task)}
-                                src={"https://joesch.moe/api/v1/random?key=1"
-                                    // + task.id
+                                src={"https://joesch.moe/api/v1/random?key="
+                                    + user.createdAt
                                 }
                             />
                         </div>
@@ -71,30 +101,40 @@ const UserCard = () => {
                 gap: 1,
                 alignItems: "center",
                 justifyContent: "space-between"
+                
             }}>
-                    <Typography variant="h6" component="h6" sx={{fontFamily: "inherit"}}>
+                <Typography variant="h6" component="h6" sx={{fontFamily: "Poppins",fontSize:"0.9rem",color: "#003210", margin: "0 auto"}}>
+                        {user.email}
+                    </Typography>
+                    {/* <Typography variant="h6" component="h6" sx={{fontFamily: "Poppins",fontSize:"0.9rem",color: "#003210"}}>
                         Completed Tasks -
-                    </Typography>
-                    <Typography variant="h6" component="h6"  sx={{fontFamily: "inherit"}}>
-                        8/10
-                    </Typography>
+                    </Typography> */}
+                    {/* <Typography variant="h6" component="h6"  sx={{fontFamily: "Poppins",fontSize:"1rem",color: "#ff001b"}}>
+                        {user.tasks.length == 0 ? "0/0" : `${
+                            user.tasks.filter(task => task.stage === 'COMPLETED').length} /  
+                            ${user.tasks.length}`}
+                    </Typography> */}
                 </Box>
                 <Box sx={{
                     display: "flex",
                     justifyContent: "end",
                     padding: "2px",
                     margin: "0 10px 10px 10px",
+                    
                 }}>
                     <Typography variant="h6" component="h6" sx={{
-                        fontSize: "0.8rem",
-                        color: "#161d2f",
-                        fontWeight: "700"
+                    
+                        fontWeight: "500",
+                        fontFamily: "Poppins",
+                                fontSize: "0.7rem",
+                                color: "#161d2f"
                     }}>
-                        ~ ADMIN
+                        {`-${user.role}`}
                     </Typography>
                 </Box>
 
             </Box>
+            </RLink>
     )
 }
 
