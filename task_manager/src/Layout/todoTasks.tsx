@@ -25,17 +25,18 @@ const TodoTasks = () => {
         <Box sx={{
           
         }}>
-        {tasks ? (tasks.filter((task)=> task.stage === "TODO").map((task, index) => (
+        {tasks.filter((task)=> task.stage === "TODO").length != 0 ? (tasks.filter((task)=> task.stage === "TODO").map((task, index) => (
               <TaskCard index={index} task = {task}/>
             )
         )): (<div>
                     <Typography variant="h5" sx={{
-                                fontWeight: 700,
+                                fontWeight: 500,
                                 fontFamily: "Poppins",
-                                fontSize: "1.7rem",
-                                color: "#161d2f"
+                                fontSize: "1.2rem",
+                                color: "white",
+                                textAlign: "center"
                             }} gutterBottom>
-          There no any task.
+          There is no any task.
         </Typography>
             
         </div>)}

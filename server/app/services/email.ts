@@ -31,7 +31,9 @@ export const resetPasswordEmailTemplate = (token = ""): string => `
 <html>
   <body>
     <h3>Join TODO APP</h3>
-    <p>Click <a href="${process.env.FE_BASE_URL}/api/users/set-new-password?token=${token}">here</a> to reset your password</p>
+    <p>Click <a href="${process.env.FE_BASE_URL}/set-new-password?token=${token}">here</a> to reset your password</p>
+    
+    
     <span>${process.env.FE_BASE_URL}/api/users/set-new-password/${token}</span>
   </body>
 </html>`;

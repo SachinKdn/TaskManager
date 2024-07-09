@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../Layout'
-import { useGetAllUsersMutation } from "../redux/api";
+import { useGetAllUserQuery, useGetAllUsersMutation } from "../redux/api";
 import { AppDispatch } from '../redux/store';
 import { useDispatch } from 'react-redux';
 import { IUser } from './login';
@@ -10,24 +10,44 @@ import { Link } from 'react-router-dom';
 import "./dashboard.css"
 
 const DashboardAdmin = () => {
-  const [getAllUsers,  { data, error, isLoading }] = useGetAllUsersMutation();
+  const  { data, error, isLoading } = useGetAllUserQuery("");
+  console.log({ data, error, isLoading })
+  console.log(data?.length)
   const dispatch = useDispatch<AppDispatch>();
   const [users, setAllUsersState] = useState<IUser[]>([]);
   useEffect(() => {
     dispatch(setIsLoading({loading : true}));
-    const fetchData = async () => {
-      try {
-        const result = await getAllUsers(1); // Assuming getAllUsers action creator is correctly configured
-        setAllUsersState(result.data.data)
-        console.log(result);
-        dispatch(setUsers({users: result.data.data }))
-        dispatch(setIsLoading({loading : false}));
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    };
-    fetchData();
-  },[dispatch])
+    if (!isLoading && data) {
+      console.log("Fetching over");
+      setAllUsersState(data);
+      dispatch(setUsers({users: data }))
+      dispatch(setIsLoading({loading : false}));
+    }
+  }, [isLoading, data]);
+  // if(!isLoading){
+  //   const result = data;
+  //   // const result = await getAllUsers(1); // Assuming getAllUsers action creator is correctly configured
+  //   // setAllUsersState(result.data)
+  //   console.log(result);
+  // }
+  // useEffect(() => {
+    // dispatch(setIsLoading({loading : true}));
+    
+    
+    // const fetchData = async () => {
+    //   try {
+    //     const result = data;
+    //     // const result = await getAllUsers(1); // Assuming getAllUsers action creator is correctly configured
+    //     setAllUsersState(result.data)
+    //     console.log(result);
+    //     dispatch(setUsers({users: result.data.data }))
+    //     dispatch(setIsLoading({loading : false}));
+    //   } catch (error) {
+    //     console.error('Error fetching users:', error);
+    //   }
+    // };
+    // fetchData();
+  // },[dispatch])
 
   return (
     <Layout>

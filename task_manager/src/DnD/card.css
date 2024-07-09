@@ -1,0 +1,12 @@
+.highPriority{
+    background-color: tomato;
+}
+.mediumPriority{
+    background-color:coral;
+}
+.lowPriority{
+    background-color:yellow;
+}
+.normalPriority{
+    background-color: gainsboro;
+}

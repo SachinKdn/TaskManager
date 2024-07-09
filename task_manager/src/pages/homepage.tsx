@@ -10,6 +10,7 @@ import { setLoading, setTasks } from '../redux/reducer'
 import { AppDispatch } from "../redux/store";
 import { useNavigate } from 'react-router-dom';
 import { ITask, IUser } from '../pages/login';
+import Board from "../DnD/Board";
 
 
 // const Home = () => {
@@ -26,6 +27,7 @@ import { ITask, IUser } from '../pages/login';
 const Home = ()=>{
     const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
     const user  = useSelector((state: RootState) => state.auth.user) as IUser;
+    const tasks = useSelector((state: RootState) => state.users.tasks) as ITask[];
     // const [tasks, setTasks] = useState<ITask[]>([])
     const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -48,11 +50,11 @@ const Home = ()=>{
         }
       },[isAuthenticated,navigate])
     return (
-    // <Box>
-    //     Home
-    // </Box>
     <Layout>
-        <div style={{border: "2px solid black"}}><p>This is Home Page. <br/> Remain to implement the Kanban Board.</p></div>
+      {tasks.length !== 0 && <Board tasks={tasks}/> }
+        <div style={{border: "2px solid black"}}>
+          
+        </div>
         </Layout>
     )
 }

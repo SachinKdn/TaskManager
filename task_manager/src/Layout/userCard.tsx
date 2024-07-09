@@ -8,13 +8,13 @@ import "./UserCard.css"
 import { IUser } from "../pages/login";
 interface UserCardProps {
     id: string;
-    key: string;
+    keyID: number;
     user: IUser;
   }
-const UserCard : React.FC<UserCardProps> = ({id, key, user}) => {
+const UserCard : React.FC<UserCardProps> = ({id, keyID, user}) => {
     return (
     <RLink 
-        key={key}
+        key={keyID}
         to={`${id}`}
         state={{ user }}
 

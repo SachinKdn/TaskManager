@@ -57,6 +57,7 @@ router.put("/update/:id",
       
           // Update the task
           const updatedTask = await Tasks.findByIdAndUpdate(taskId, updateData, { new: true });
+          console.log("Task Updated............")
           res.send(createResponse(updatedTask,"Task Created Successfully!!"))
         //   res.status(200).json({ task: updatedTask, message: 'Task updated successfully' });
         } catch (error) {
@@ -75,7 +76,9 @@ router.delete("/delete/:id",
             res.status(404).json({ message: 'Task not found' });
             return;
         }
+
         const deletedTask = await Tasks.findByIdAndDelete(req.params.id);
+        console.log("Task Deleted............")
         res.send(createResponse(deletedTask,"Task Deleted Successfully!!"))
     })
 )

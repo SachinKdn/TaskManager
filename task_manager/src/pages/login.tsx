@@ -20,11 +20,13 @@ enum UserRole {
     ADMIN = "ADMIN",
   }
   export interface ITask{
+    _id: string,
     title: string,
     desc: string,
     priority: string,
     stage: string,
-    estTime: number
+    estTime: number,
+    assignedTo: string
   }
   export interface IUser {
     _id: string;

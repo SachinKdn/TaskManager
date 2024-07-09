@@ -116,10 +116,13 @@ router.get("/demo",(req: Request, res: Response) => {
     passport.authenticate("jwt", { session: false }),
     checkAdmin,
     expressAsyncHandler(async (req: Request, res: Response): Promise<void> => {
-      
+      console.log(req.user?.name)
+      console.log(req.user?._id)
+      console.log("AllUsers are requested by admin.")
       const users = await User.find().select("-password");
       console.log(users);
-      res.send(createResponse(users, "Reset password link sent successfully!"));
+      res.send(users);
+      // res.send(createResponse(users));
     })
   )
   router.get("/mytasks",
@@ -138,6 +141,7 @@ router.get("/demo",(req: Request, res: Response) => {
       const userId = req.params.id;
       const tasks = await Tasks.find({assignedTo: userId});
       res.send(createResponse(tasks));
+      // res.send(tasks);
     })
   )
   

@@ -12,6 +12,7 @@ const AllUsers = () => {
   const users  = useSelector((state: RootState) => state.users.users) as IUser[];
   return (
     <Layout>
+      <Box>
       <div>AllUsers</div>
       <Box sx={{
         display: "flex",
@@ -22,10 +23,11 @@ const AllUsers = () => {
 
       }}>
 
-{users && users.map((user : IUser) => (
-          <UserCard key = {user._id} id={user._id}  user = {user}/>
+{users && users.map((user : IUser, index) => (
+          <UserCard keyID = {index} id={user._id}  user = {user}/>
         ))}
 
+      </Box>
       </Box>
     </Layout>
   )

@@ -145,7 +145,7 @@ type Task = {
             value={task.assignedTo}
             onChange={handleChange}
           >
-            {users.filter(user => user.isActive).map((user) => (
+            {users.filter(user => user.isActive  && user.role === "USER").map((user) => (
               <MenuItem key={user._id} value={user._id}>
                 {user.name}
               </MenuItem>
