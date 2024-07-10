@@ -32,7 +32,7 @@
     width: 100%;
     margin: 0 2rem;
   }
-  .dashboardSummaryBox2 > a {
+  .dashboardSummaryBox2 > div {
     color: rgb(0, 0, 0);
     font: 300 2rem "Roboto";
     text-align: center;
@@ -48,19 +48,19 @@
     align-items: center;
     flex-direction: column;
   }
-  .dashboardSummaryBox2 > a > p{
+  .dashboardSummaryBox2 > div > p{
     margin: 0;
     font-family: Poppins;
     font-weight: 500;
     font-size: 1.6rem;
   }
   
-  .dashboardSummaryBox2 > a:first-child {
+  .dashboardSummaryBox2 > div:first-child {
     background-color: rgb(255, 110, 110);
     color: rgb(255, 255, 255);
   }
   
-  .dashboardSummaryBox2 > a:last-child {
+  .dashboardSummaryBox2 > div:last-child {
     background-color: rgb(51, 51, 51);
     color: rgb(255, 255, 255);
   }

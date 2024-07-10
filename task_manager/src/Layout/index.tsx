@@ -29,7 +29,11 @@ const Layout = ({ children }: LayoutProps) => {
         // height: "inherit",
         height: "unset",
         overflowY: "scroll",
-        margin: "10px",
+
+        margin: {
+          xs: "unset",
+          lg: "10px",
+        },
         // border: "2px solid black" 
         "&::-webkit-scrollbar": {
           display: "none",

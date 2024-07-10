@@ -10,6 +10,7 @@ import { omit } from 'lodash';
 import passport from "passport";
 import { checkAdmin } from '../services/checkAdmin';
 import Tasks from "../schema/Tasks";
+import { catchError, validate } from "../middleware/validation";
 
 
 
@@ -18,6 +19,8 @@ const router = express.Router();
 
 router.post(
   "/login",
+  validate("user:login"),
+  catchError,
   passport.authenticate("login", { session: false }),
   expressAsyncHandler(async (req, res, next) => {
     console.log("Login Request Occured in users.ts.")
@@ -46,6 +49,8 @@ router.put(
 
 router.post(
     "/register",
+    validate("users:create"),
+  catchError,
     expressAsyncHandler(async (req, res) => {
       const {name, email, password, role } = req.body as IUser;
       const user = await userService.createUser({ name, email, password, role });
@@ -86,6 +91,7 @@ router.get("/demo",(req: Request, res: Response) => {
     "/set-new-password/:token",
     expressAsyncHandler(async (req: Request, res: Response): Promise<void> => {
       const { password, name } = req.body as IUser;
+      console.log(req.body);
       const decode = decodeToken(req.params.token);
       if (!decode || !decode._id) {
         throw createHttpError(400, { message: "Invalid token" });

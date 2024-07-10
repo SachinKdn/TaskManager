@@ -45,6 +45,7 @@ const isValidPassword = async function (value: string, password: string) {
           async (email, password, done) => {
             console.log("Login req in login passport");
             console.log(email);
+            console.log(password);
             try {
               const user : IUser | null = await userService.getUserByEmail(email);
               if (user == null) {

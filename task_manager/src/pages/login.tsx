@@ -1,11 +1,11 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm ,SubmitHandler, useFieldArray} from "react-hook-form";
 import * as yup from "yup"
 import {yupResolver} from "@hookform/resolvers/yup";
 // import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './login.css';  // Import the CSS file
+// import './login.css';  // Import the CSS file
 import { useUserLoginMutation } from "../redux/api";
 import { useDispatch } from 'react-redux';
 import { setLoading, setTokens, resetTokens ,setUser } from '../redux/reducer'
@@ -14,6 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { Box, Button, Typography, TextField, Link } from '@mui/material';
+import { ApiError, ValidationError } from "../errorType";
+import { Slide, toast } from 'react-toastify';
 
 enum UserRole {
     USER = "USER",
@@ -54,6 +56,19 @@ const inputSchema = yup.object().shape({
 
 
 const Login : React.FC= () => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Add login logic here
+    console.log('Email:', email);
+    console.log('Password:', password);
+  };
+
+
+
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user  = useSelector((state: RootState) => state.auth.user) as IUser;
   const navigate = useNavigate();
@@ -73,15 +88,14 @@ const Login : React.FC= () => {
         try {
           dispatch(setLoading({loading : true}));
           console.log(data);
-          const result = await userLogin(data)
-        //   .unwrap();
-          localStorage.setItem('token', result.data.data.accessToken);
+          const result = await userLogin(data).unwrap();
           console.log("Login successful:", result);
-          console.log(result.data.data.user.role);
-          dispatch(setUser({user: result.data.data.user}));
-          dispatch(setTokens({accessToken: result.data.data.accessToken, refreshToken: result.data.data.refreshToken }))
+          localStorage.setItem('token', result.data.accessToken);
+          console.log(result.data.user.role);
+          dispatch(setUser({user: result.data.user}));
+          dispatch(setTokens({accessToken: result.data.accessToken, refreshToken: result.data.refreshToken }))
           dispatch(setLoading({loading : false}));
-          if(result.data.data.user.role === "ADMIN"){
+          if(result.data.user.role === "ADMIN"){
             console.log("Logged by ADMIN")
             navigate("/admin")
           }else{
@@ -89,8 +103,28 @@ const Login : React.FC= () => {
             navigate('/');
           }
           // Handle successful login (e.g., store tokens, redirect user)
-        } catch (err) {
-          console.error("Login failed:", err);
+        } catch(err) {
+          console.log(err)
+          const apiError = err as ApiError;
+            if (apiError?.data?.message) {
+              console.log(apiError?.data?.message)
+              toast(apiError?.data?.message, { type: "error" });
+            }
+          // const validationError = err as ValidationError;
+          dispatch(setLoading({loading : false}));
+
+          // console.error("Signup failed:", validationError.data.data.errors[0].msg);
+          // toast.error(validationError.data.data.errors[0].msg, {
+          //   position: "top-right",
+          //   autoClose: 3000,
+          //   hideProgressBar: false,
+          //   closeOnClick: true,
+          //   pauseOnHover: false,
+          //   draggable: true,
+          //   progress: undefined,
+          //   theme: "dark",
+          //   transition: Slide,
+          //   });
         }
       };
       React.useEffect(() => {
@@ -133,6 +167,58 @@ const Login : React.FC= () => {
           Create a new account
         </Link>
     </form>
+    {/* <Box
+      component="form"
+      onSubmit={handleLogin}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: 3,
+        backgroundColor: '#f5f5f5',
+      }}
+    >
+      <Typography variant="h4" component="h1" gutterBottom>
+        Login
+      </Typography>
+      <TextField
+          id="outlined-password-input"
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+        />
+      <TextField
+        label="Email"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <TextField
+        label="Password"
+        type="password"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        sx={{ mt: 2, mb: 2 }}
+      >
+        Login
+      </Button>
+      <Link href="/register" variant="body2">
+        Create a new account
+      </Link>
+    </Box> */}
 
     
   </div>

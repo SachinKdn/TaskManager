@@ -1,6 +1,6 @@
 
-import React, { useEffect } from "react";
-import { useForm ,SubmitHandler, useFieldArray} from "react-hook-form";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import * as yup from "yup"
 import {yupResolver} from "@hookform/resolvers/yup";
 // import { Slide, ToastContainer, toast } from 'react-toastify';
@@ -9,6 +9,7 @@ import Layout from "../Layout";
 import './inviteUser.css';  // Import the CSS file
 import { useInviteUserMutation } from "../redux/api";
 import { Slide, toast } from 'react-toastify';
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 
 interface IFormInput {
@@ -26,14 +27,26 @@ const inputSchema = yup.object().shape({
 
 
 const InviteUser : React.FC= () => {
-    const [inviteUser,  { data, error, isLoading }] = useInviteUserMutation();
+    const [inviteUser,  { data, isLoading }] = useInviteUserMutation();
 
-    const { register, reset, handleSubmit, formState: { errors } } = useForm<IFormInput>({
+    const {  reset } = useForm<IFormInput>({
         resolver: yupResolver(inputSchema),
       });
+      const [newUser, setNewUser] = useState({
+        email: '',
+        role: 'USER',
+      });
+      const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
+        const { name, value } = e.target;
+        console.log({name, value})
+        setNewUser({
+          ...newUser,
+          [name as string]: value,
+        });
+      };
     
-      const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        console.log(data);
+      const onSubmit = async () => {
+        console.log(newUser);
         const result = await inviteUser(data)
           if(!result.error){
             console.log(result.error);
@@ -69,28 +82,66 @@ const InviteUser : React.FC= () => {
       };
   return (
     <Layout>
-      {isLoading ? <div>We are processing your request.</div> : 
+      {isLoading ? <div>We are processing your request. WAIT A MOMENT</div> : 
     <div className="box">
     <div className="invite-container">
     <h2>Invite New User</h2>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
+    <Box>
+      {/* <div>
         <label htmlFor="email">Email</label>
         <input id="email" {...register('email')} />
         {errors.email && <p>{errors.email.message}</p>}
-      </div>
+      </div> */}
       
-      <div>
+      {/* <div>
         <label htmlFor="role">Role</label>
         <select id="role" {...register('role')} defaultValue="USER">
           <option value="USER">User</option>
           <option value="ADMIN">Admin</option>
         </select>
         {errors.role && <p>{errors.role.message}</p>}
-      </div>
+      </div> */}
+      <TextField
+          // label="Title"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          name="email"
+          value={newUser.email}
+          onChange={handleChange}
+          placeholder="Enter Your Email"
+          InputProps={{
+            sx: {
+              '& .MuiInputBase-input': {
+                border: '0px',
+                margin: "auto",
+                padding: "13px 10px"
+              },
+            },
+          }}
+          // error={!!errors.title}
+          // helperText={errors.title}
+        />
+
+      <FormControl fullWidth>
       
-      <button type="submit">Send Invitation Link</button>
-    </form>
+  <InputLabel id="demo-simple-select-label">Role</InputLabel>
+  <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={newUser.role}
+    label="role"
+    name="role"
+    // {...register('role')}
+    onChange={handleChange}
+  >
+    <MenuItem value="USER">User</MenuItem>
+    <MenuItem value="ADMIN">Admin</MenuItem>
+  </Select>
+</FormControl>
+      
+      <button type="submit" onClick={onSubmit} style={{marginTop: "20px"}}>Send Invitation Link</button>
+    </Box>
   </div>
   </div>
 }

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography,Paper } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Layout from "../Layout";
 import { useGetMyTasksMutation } from '../redux/api';
@@ -51,10 +51,12 @@ const Home = ()=>{
       },[isAuthenticated,navigate])
     return (
     <Layout>
-      {tasks.length !== 0 && <Board tasks={tasks}/> }
-        <div style={{border: "2px solid black"}}>
-          
-        </div>
+      {tasks.length !== 0 ? <Board tasks={tasks}/> :
+        <Paper sx={{ padding: 2, textAlign: 'center', backgroundColor: '#f8f8f8' }}>
+        <Typography variant="h6">No tasks available</Typography>
+        <Typography variant="body2">Please add some tasks to be productive.</Typography>
+      </Paper>
+        }
         </Layout>
     )
 }

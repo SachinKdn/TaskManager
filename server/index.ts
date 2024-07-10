@@ -9,7 +9,7 @@ import { initPassport } from "./app/services/passport-jwt";
 import usersRoutes from "./app/routes/users";
 import tasksRoutes from "./app/routes/tasks";
 import { IUser } from './app/schema/User';
-
+import errorHandler from './app/middleware/errorHandler';
 loadConfig();
 
 const app = express();
@@ -49,7 +49,7 @@ const initApp = async (): Promise<void> => {
       });
     
 
-
+    app.use(errorHandler);
     http.createServer(app).listen(PORT,() => console.log(`Server running on port http://localhost:${PORT}`));
 }
 

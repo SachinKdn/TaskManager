@@ -14,6 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { Link } from "@mui/material";
+import { ValidationError } from "../errorType";
+import { Slide, toast } from 'react-toastify';
 enum UserRole {
     USER = "USER",
     ADMIN = "ADMIN",
@@ -69,7 +71,7 @@ const SignUp : React.FC= () => {
           console.log(data);
           const result = await userRegister(data).unwrap();
           console.log("Signup successful:", result); 
-        localStorage.setItem('token', result.data.accessToken);
+          localStorage.setItem('token', result.data.accessToken);
           console.log(result.data.user);
           dispatch(setUser({user: result.data.user}));
           dispatch(setTokens({accessToken: result.data.accessToken, refreshToken: result.data.refreshToken }))
@@ -79,7 +81,20 @@ const SignUp : React.FC= () => {
           navigate('/');
           // Handle successful login (e.g., store tokens, redirect user)
         } catch (err) {
-          console.error("Signup failed:", err);
+          const validationError = err as ValidationError;
+          dispatch(setLoading({loading : false}));
+          console.error("Signup failed:", validationError.data.data.errors[0].msg);
+          toast.error(validationError.data.data.errors[0].msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Slide,
+            });
         }
       };
       React.useEffect(() => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '../Layout'
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import UserCard from '../Layout/userCard';
 import { useSelector } from 'react-redux';
 
@@ -13,7 +13,9 @@ const AllUsers = () => {
   return (
     <Layout>
       <Box>
-      <div>AllUsers</div>
+      <Typography variant="h5" component="h1" gutterBottom sx={{color: "#161d2f", fontWeight: 600, margin: "0 auto"}}>
+          All Users
+        </Typography>
       <Box sx={{
         display: "flex",
         gap: "3",

@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Box, Hidden, Typography } from "@mui/material";
 
 import TaskIcon from '@mui/icons-material/Task';
@@ -7,7 +7,7 @@ import TaskIcon from '@mui/icons-material/Task';
 import HomeIcon from '@mui/icons-material/Home';
 // import CallIcon from '@mui/icons-material/Call';
 import LogoutIcon from '@mui/icons-material/Logout';
-import SettingsIcon from '@mui/icons-material/Settings';
+// import SettingsIcon from '@mui/icons-material/Settings';
 // import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 // import VisibilityOff from '@mui/icons-material/VisibilityOff';
 //in progress
@@ -22,7 +22,7 @@ import GroupIcon from '@mui/icons-material/Group';
 
 import React from "react";
 import { useDispatch } from 'react-redux';
-import { setLoading, setTokens, resetTokens ,setUser } from '../redux/reducer'
+import { resetTokens  } from '../redux/reducer'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { AppDispatch } from "../redux/store";
@@ -101,7 +101,6 @@ export interface IUser {
   role: string;
 }
 const Sidebar = () => {
-  const { pathname } = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user  = useSelector((state: RootState) => state.auth.user) as IUser;
@@ -118,7 +117,7 @@ const Sidebar = () => {
     if(!isAuthenticated){
       navigate('/login')
     }
-  },[isAuthenticated])
+  },[isAuthenticated,navigate])
 
   return (
     <Box
@@ -133,7 +132,8 @@ const Sidebar = () => {
         },
         alignItems: "center",
         justifyContent: {
-          md: "space-between",
+          // xs: "space-evenly",
+          sm: "space-between",
           lg: "start",
         },
         width: {

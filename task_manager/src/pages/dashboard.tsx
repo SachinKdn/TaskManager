@@ -69,14 +69,14 @@ const DashboardAdmin = () => {
             </p>
           </div>
           <div className="dashboardSummaryBox2">
-            <Link to="/admin/products">
+            <div >
               <p>Admins</p>
               <p>{users && users.filter(user => user.role === 'ADMIN').length}</p>
-            </Link>
-            <Link to="/admin/orders">
+            </div>
+            <div >
               <p>Users</p>
               <p>{users && users.filter(user => user.role === 'USER').length}</p>
-            </Link>
+            </div>
             
           </div>
         </div>

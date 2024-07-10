@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { setLoading, setTokens, resetTokens ,setUser } from '../redux/reducer'
 import { AppDispatch } from "../redux/store";
 
+import { Slide, toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -70,8 +71,20 @@ const ResetPasword = () => {
 
         const token = getTokenFromUrl();
         try{
-            const result = await setNewPassword({token, userData}).unwrap();
+          console.log({token, userData})
+            const result = await setNewPassword({token, credentials : userData}).unwrap();
             console.log("Password Set successful:", result);
+            toast.success('New Password Set Successfully!!', {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+              transition: Slide,
+              });
             navigate("/login")
         }catch(err){
             console.error("Process failed:", err);
