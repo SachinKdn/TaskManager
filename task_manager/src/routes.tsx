@@ -14,11 +14,17 @@ import AllUsers from "./pages/allUsers";
 import CompletedTasks from "./Layout/completedTasks";
 import InProgressTasks from "./Layout/inProgressTasks";
 import TodoTasks from "./Layout/todoTasks";
+import TaskGraph from "./pages/taskGraph";
 
 export const router = createBrowserRouter([
     {
         path:"/",
         element:<Home/>,
+        errorElement:<Error/>
+    },
+    {
+        path:"/graph",
+        element:<TaskGraph/>,
         errorElement:<Error/>
     },
     {

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Avatar } from 'antd';
 import { ITask } from "../pages/login";
 import "./card.css"
+import { Typography } from '@mui/material';
 
 const Container = styled.div`
     border-radius: 10px;
@@ -65,19 +66,46 @@ const Card : React.FC<CardProps> = ({ task, index }) => {
                 >
                     <div style={{ display: "flex", justifyContent: "start", padding: 2 }}>
             <span>
-              <small style={{
+              {/* <small style={{
                 fontSize:"10px"
               }}>
                 #{task._id}
                   {"  "}
-              </small>
+              </small> */}
             </span>
                     </div>
                     <div
                         style={{ display: "flex",flexDirection: "column", justifyContent: "center", padding: 2 }}
                     >
-                        <TextContent>{task.title}</TextContent>
-                        <p>{task.desc}</p>
+                        {/* <TextContent>{task.title}</TextContent> */}
+                        <Typography variant="h6" component="h6" 
+                        sx={{
+                          fontSize:"0.9rem",
+                          fontWeight: "600",
+                          fontFamily: "Inter"
+                        }}
+                        >{task.title}</Typography>
+                       
+                        <Typography variant="h6" component="h6" 
+                        sx={{
+                          fontSize:"0.8rem",
+                          fontWeight: "500",
+                          fontFamily: "Inter"
+                        }}
+                        >{task.desc}</Typography>
+                        <Typography variant="h6" component="h6" 
+                        sx={{
+                          fontSize:"0.6rem",
+                          fontWeight: "500",
+                          fontFamily: "Inter",
+                          color: "#471b1b",
+                          backgroundColor: "#ffe9cd",
+                          padding: "1px 6px",
+                          width: "fit-content",
+                          borderRadius: "13px",
+                          border: "0.5px solid #ffd094",
+                        }}
+                        >Est. Time : {task.estTime} hrs.</Typography>
                     </div>
                     {/* <Icons>
                         <div>

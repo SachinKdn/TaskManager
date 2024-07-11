@@ -1,12 +1,12 @@
 .highPriority{
-    background-color: tomato;
+    background-color: #E57373;
 }
 .mediumPriority{
-    background-color:coral;
+    background-color:#FFA726;
 }
 .lowPriority{
-    background-color:yellow;
+    background-color:#AED581;
 }
 .normalPriority{
-    background-color: gainsboro;
+    background-color: #E0E0E0;
 }

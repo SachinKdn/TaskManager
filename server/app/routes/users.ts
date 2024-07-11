@@ -54,10 +54,14 @@ router.post(
     expressAsyncHandler(async (req, res) => {
       const {name, email, password, role } = req.body as IUser;
       const user = await userService.createUser({ name, email, password, role });
-    
+      console.log("---------------------------------")
+      console.log(user)
     const { password: _p, ...result } = user;
     const userWithoutPassword = omit(user.toObject(), ['password']);
-    const tokens = createUserTokens(result);
+    console.log("---------------------------------")
+    console.log(userWithoutPassword)
+    console.log("---------------------------------")
+    const tokens = createUserTokens(user.toObject());
     res.send(
       createResponse({
         ...tokens,
@@ -78,6 +82,7 @@ router.get("/demo",(req: Request, res: Response) => {
     checkAdmin,
     expressAsyncHandler(async (req, res) => {
       const { email, role } = req.body as IUser;
+      console.log({email,role});
       const user = await userService.createUserAndSendLink({
         email,
         role,

@@ -25,9 +25,12 @@ const isValidPassword = async function (value: string, password: string) {
         },
         async (token, done) => {
           console.log("JWT PASSPORT>>>>>>")
-            try {
+          console.log(token)
+          console.log("TOKEN DONE")
+          try {
             done(null, token);
           } catch (error) {
+            console.log(error)
             done(error);
           }
         }

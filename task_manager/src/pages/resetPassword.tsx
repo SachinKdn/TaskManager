@@ -148,6 +148,7 @@ React.useEffect(() => {
           helperText={errors.name}
         />
         <TextField
+        type="password"
           label="Password"
           variant="outlined"
           fullWidth
@@ -159,7 +160,7 @@ React.useEffect(() => {
           helperText={errors.password}
         />
         <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2 }}>
-          Assign Task
+          Save Password
         </Button>
     </form>
   </div>

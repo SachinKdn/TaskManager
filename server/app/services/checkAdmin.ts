@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import User, { type IUser } from "../schema/User";
 
 export const checkAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.user?._id)
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
     }

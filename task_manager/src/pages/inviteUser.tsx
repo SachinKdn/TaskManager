@@ -47,7 +47,7 @@ const InviteUser : React.FC= () => {
     
       const onSubmit = async () => {
         console.log(newUser);
-        const result = await inviteUser(data)
+        const result = await inviteUser(newUser)
           if(!result.error){
             console.log(result.error);
             console.log("error")
