@@ -109,7 +109,7 @@ const InviteUser : React.FC= () => {
           name="email"
           value={newUser.email}
           onChange={handleChange}
-          placeholder="Enter Your Email"
+          placeholder="Enter Email"
           InputProps={{
             sx: {
               '& .MuiInputBase-input': {
