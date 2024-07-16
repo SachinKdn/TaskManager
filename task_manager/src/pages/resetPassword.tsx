@@ -10,7 +10,7 @@ import { useSetNewPasswordMutation, useUserLoginMutation, useUserRegisterMutatio
 import { useDispatch } from 'react-redux';
 import { setLoading, setTokens, resetTokens ,setUser } from '../redux/reducer'
 import { AppDispatch } from "../redux/store";
-
+import 'react-toastify/dist/ReactToastify.css';
 import { Slide, toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ import { RootState } from '../redux/store';
 import { Link, TextField } from "@mui/material";
 import { IUser } from "./login";
 import { Button } from "@mui/material";
+import { ApiError } from "../errorType";
 
 interface setPass{
     name: string,
@@ -88,6 +89,19 @@ const ResetPasword = () => {
             navigate("/login")
         }catch(err){
             console.error("Process failed:", err);
+            const apiError = err as ApiError;
+            console.log(apiError);
+            toast.error(apiError.data.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+              transition: Slide,
+              });
           }
       }
   };

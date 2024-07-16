@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { ITask } from '../pages/login';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from "../redux/store";
+import { setIsLoading, setTasks , setUsers} from '../redux/reducer'
 import Column from "./Column";
-import { useUpdateTaskByIDMutation } from '../redux/api';
+import { useUpdateTaskByIDMutation , useGetMyTasksMutation} from '../redux/api';
 interface TasksProps {
   tasks: ITask[];
 }
+
 const Board: React.FC<TasksProps> = ({ tasks }) => {
   const [completed, setCompleted] = useState<ITask[]>([]);
   const [incomplete, setIncomplete] = useState<ITask[]>([]);
   const [inProgress, setInProgress] = useState<ITask[]>([]);
-
+  const dispatch = useDispatch<AppDispatch>();
   const [updateTaskByID] = useUpdateTaskByIDMutation();
+  const [getMyTasks] = useGetMyTasksMutation();
   useEffect(() => {
     console.log(tasks)
     setCompleted(tasks.filter((task) => task.stage === "COMPLETED"));
@@ -20,7 +25,7 @@ const Board: React.FC<TasksProps> = ({ tasks }) => {
   }, [tasks]);
 
   
-  const handleDragEnd = (result: DropResult) => {
+  const handleDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
     console.log({source,destination})
     if (!destination) return;
@@ -41,7 +46,16 @@ const Board: React.FC<TasksProps> = ({ tasks }) => {
 
     // Save the changes to the database
     console.log(updatedTask);
-    updateTaskByID({ id: updatedTask._id, credentials: { stage: updatedTask.stage } });
+    await updateTaskByID({ id: updatedTask._id, credentials: { stage: updatedTask.stage } });
+    try {
+      const result = await getMyTasks(0);
+      console.log("Tasks Fetched from Board.TSX")
+        console.log(result.data.data);
+        dispatch(setTasks({tasks: result.data.data}));
+        dispatch(setIsLoading({loading : false}));
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
   };
 
   const getColumn = (colId: string) => {

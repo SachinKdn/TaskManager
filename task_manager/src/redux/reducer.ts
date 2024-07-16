@@ -68,12 +68,15 @@ export const usersSlice = createSlice({
     },
     setTasks: (state,action: PayloadAction<{tasks: object[]}>)=>{
       state.tasks = action.payload.tasks;
+    },
+    resetTasks: (state)=>{
+      state.tasks = []
     }
   }
 })
 
 export const { setLoading, setTokens, resetTokens ,setUser} = authSlice.actions;
 
-export const { setIsLoading ,setUsers, setTasks} = usersSlice.actions;
+export const { setIsLoading ,setUsers, setTasks, resetTasks} = usersSlice.actions;
 
 export default authSlice.reducer;

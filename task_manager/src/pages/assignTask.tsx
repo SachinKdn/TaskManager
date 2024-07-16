@@ -82,20 +82,25 @@ type Task = {
   const handleSubmit = async () => {
     if(user.role === "USER"){
       console.log("User role is USER")
-      setTask({
-        ...task,
+      setTask(prevTask => ({
+        ...prevTask,
         assignedTo: user._id,
-      });
+      }));
     }
     console.log("Task assigned to - " + task.assignedTo);
     const newErrors = {
       title: task.title ? '' : 'Title is required',
-      // desc: task.desc ? '' : 'Description is required',
       assignedTo: task.assignedTo ? '' : 'Assign to user is required',
       estTime: task.estTime ? '' : 'Estimation hours are required',
       priority: task.priority ? '' : 'Priority is required',
     };
-    if (Object.values(newErrors).some(error => error)) {
+    
+    const effectiveErrors = user.role === "USER"
+  ? (({ assignedTo, ...rest }) => rest)(newErrors)  //IIFE
+  : newErrors;
+    if (Object.values(effectiveErrors).some(error => error)) {
+      console.log("Some Error");
+      console.log(effectiveErrors);
       setErrors(newErrors);
       return;
     } else {

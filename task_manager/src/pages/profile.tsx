@@ -1,17 +1,108 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Avatar, Paper, Grid } from '@mui/material';
 import Layout from '../Layout';
-import { IUser } from './login';
+import { ITask, IUser } from './login';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import TodoTasks from '../Layout/todoTasks';
+
+import { Doughnut } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartData,
+  ChartOptions,
+} from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+ChartJS.register(ArcElement, Tooltip, Legend
+  // , ChartDataLabels
+);
 
 
 
+const exampleData = {
+  labels: ['ToDo Tasks', 'In Progress Tasks', 'Completed Tasks'],
+  datasets: [
+    {
+      label: '# of Votes',
+      data: [TodoTasks, 19, 3],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+      ],
+      // borderColor: [
+      //   'rgba(255, 99, 132, 1)',
+      //   'rgba(54, 162, 235, 1)',
+      //   'rgba(255, 206, 86, 1)',
+      // ],
+      borderWidth: 1,
+    },
+  ],
+};
+const exampleDataTemplate: ChartData<'doughnut'> = {
+  labels: ['ToDo Tasks', 'In Progress Tasks', 'Completed Tasks'],
+  datasets: [
+    {
+      label: '#currently',
+      data: [0, 0, 0], // initial empty data
+      backgroundColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
+const options: ChartOptions<'doughnut'> = {
+  plugins: {
+    datalabels: {
+      color: '#000',
+      font: {
+        weight: 'bold',
+        size: 16,
+      },
+      formatter: (value: number) => value,
+    },
+    legend: {
+      display: true,
+    },
+    tooltip: {
+      enabled: true,
+    },
+  },
+  maintainAspectRatio: false,
+  responsive: true,
+};
 const Profile: React.FC = () => {
-
+  
+  const [exampleData, setExampleData] = useState(exampleDataTemplate);
   const user  = useSelector((state: RootState) => state.auth.user) as IUser;
+  const tasks = useSelector((state: RootState) => state.users.tasks) as ITask[];
+  useEffect(() => {
+    const todoTasks = tasks.filter((task) => task.stage === "TODO").length;
+    const inProgressTasks = tasks.filter((task) => task.stage === "IN PROGRESS").length;
+    const completedTasks = tasks.filter((task) => task.stage === "COMPLETED").length;
 
-
+    setExampleData({
+      ...exampleDataTemplate,
+      datasets: [
+        {
+          ...exampleDataTemplate.datasets[0],
+          data: [todoTasks, inProgressTasks, completedTasks],
+        },
+      ],
+    });
+  }, [tasks]);
+  
   return (
 
     <Layout>
@@ -38,11 +129,11 @@ const Profile: React.FC = () => {
           }}>{user.role === 'ADMIN' ? 'Administrator' : 'Simple User'}</Typography>
         </Grid>
       </Grid>
-      {/* <Box mt={2} display="flex" justifyContent="flex-end">
-        <Button variant="contained" color="primary" >
-          Update Profile
-        </Button>
-      </Box> */}
+      {user.role === "USER" && tasks.length !== 0 && (<Box mt={2} display="flex" justifyContent="center" sx={{height:"350px"}}>
+      <Doughnut data={exampleData} 
+      // options={options}
+      />
+      </Box>)}
     </Paper>
     </Layout>
   );

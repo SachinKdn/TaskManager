@@ -24,9 +24,43 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
+
+
+import { Doughnut } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartData,
+  ChartOptions,
+} from 'chart.js';
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const exampleDataTemplate: ChartData<'doughnut'> = {
+  labels: ['ToDo Tasks', 'In Progress Tasks', 'Completed Tasks'],
+  datasets: [
+    {
+      label: '#currently',
+      data: [0, 0, 0], // initial empty data
+      backgroundColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
 const UserDetails = () => {
   
   
+  const [exampleData, setExampleData] = useState(exampleDataTemplate);
   const users  = useSelector((state: RootState) => state.users.users) as IUser[];
   const location = useLocation();
   const [deleteTaskByID] = useDeleteTaskByIDMutation();
@@ -35,6 +69,7 @@ const UserDetails = () => {
   const { data, error, isLoading, refetch } = useGetUserTaskByIdQuery(user._id);
   const [tasks, setTasks] = useState<ITask[]>([])
   React.useEffect(() => {
+    console.log("User Details Re-rendered.")
     //   const fetchTasks = async ()=>{
     //   const result = await getUserTaskById(user._id);
     //   setTasks(result.data.data);
@@ -43,12 +78,27 @@ const UserDetails = () => {
     // fetchTasks();
     if (!isLoading && data) {
       console.log("Fetching over");
+      refetch()
       setTasks(data.data);
       console.log(data.data)
       // dispatch(setUsers({users: data }))
       // dispatch(setIsLoading({loading : false}));
     }
-  }, [isLoading, data])
+
+    const todoTasks = tasks.filter((task) => task.stage === "TODO").length;
+    const inProgressTasks = tasks.filter((task) => task.stage === "IN PROGRESS").length;
+    const completedTasks = tasks.filter((task) => task.stage === "COMPLETED").length;
+
+    setExampleData({
+      ...exampleDataTemplate,
+      datasets: [
+        {
+          ...exampleDataTemplate.datasets[0],
+          data: [todoTasks, inProgressTasks, completedTasks],
+        },
+      ],
+    });
+  }, [isLoading, data,tasks])
   
   const [errors, setErrors] = useState({
     title: '',
@@ -71,6 +121,7 @@ const UserDetails = () => {
   const handleDeleteTask = async (taskId: string) => {
     try {
       await deleteTaskByID(taskId).unwrap();
+      console.log("handleDeleteTaskById called from userDetails.")
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
     } catch (error) {
       console.error('Failed to delete task:', error);
@@ -101,6 +152,8 @@ const UserDetails = () => {
 
       <Box>
         <Paper elevation={3} sx={{ padding: 3 }}>
+        <Box sx={{display:"flex", justifyContent:"space-between"}}>
+        <Box>
           <Typography variant="h5" sx={{
             fontWeight: 700,
             fontFamily: "Poppins",
@@ -121,7 +174,13 @@ const UserDetails = () => {
           <Typography variant="body1" gutterBottom sx={{ fontFamily: "Poppins", fontSize: "0.9rem", color: "#353937", margin: "0 auto" }}>
             Created At: {new Date(user.createdAt).toLocaleDateString()}
           </Typography>
-
+          </Box>
+          <Box mt={2} display="flex" justifyContent="center" sx={{height:"250px"}}>
+      <Doughnut data={exampleData} 
+      // options={options}
+      />
+      </Box>
+          </Box>
           {!isLoading && user.role === "USER" &&
             <Box mt={3}>
               <Typography variant="h5" gutterBottom>

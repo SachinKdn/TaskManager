@@ -27,14 +27,14 @@ export const password = check("password")
   .bail()
   .withMessage("Password is required")
   .isStrongPassword({
-    minLength: 8,
+    minLength: 6,
     minLowercase: 1,
     minUppercase: 1,
     minNumbers: 1,
     minSymbols: 1,
   })
   .bail()
-  .withMessage("Enter strong password");
+  .withMessage("Enter strong password i.e. Abc@123");
 
 export const createUser = [
   check("email")

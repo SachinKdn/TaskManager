@@ -22,7 +22,7 @@ import GroupIcon from '@mui/icons-material/Group';
 
 import React from "react";
 import { useDispatch } from 'react-redux';
-import { resetTokens  } from '../redux/reducer'
+import { resetTasks, resetTokens  } from '../redux/reducer'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { AppDispatch } from "../redux/store";
@@ -65,9 +65,9 @@ const navLinks = [
     link: "/inviteUser",
   },
   {
-    name: "Completed",
-    icon: PlaylistAddCheckIcon,
-    link: "/completed",
+    name: "To Do",
+    icon: ListIcon,
+    link: "/todo",
   },
   {
     name: "In Progress",
@@ -75,10 +75,9 @@ const navLinks = [
     link: "/inprogress",
   },
   {
-    name: "To Do",
-    icon: ListIcon,
-    link: "/todo",
-    
+    name: "Completed",
+    icon: PlaylistAddCheckIcon,
+    link: "/completed",
   },
   {
     name: "Logout",
@@ -111,6 +110,7 @@ const Sidebar = () => {
     console.log("Log Out.....");
     localStorage.clear();
     dispatch(resetTokens());
+    dispatch(resetTasks());
   }
 
   React.useEffect(()=>{

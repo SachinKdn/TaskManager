@@ -25,7 +25,7 @@ const InProgressTasks = () => {
         <Box sx={{
           
         }}>
-        {tasks.filter((task)=> task.stage === "IN_PROGRESS").length != 0 ? (tasks.filter((task)=> task.stage === "IN_PROGRESS").map((task, index) => (
+        {tasks.filter((task)=> task.stage === "IN PROGRESS").length !== 0 ? (tasks.filter((task)=> task.stage === "IN PROGRESS").map((task, index) => (
               <TaskCard index={index} task = {task}/>
             )
         )): (<div>

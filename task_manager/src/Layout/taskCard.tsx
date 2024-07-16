@@ -274,7 +274,7 @@ const TaskCard : React.FC<TaskCardProps> = ({ index, task}) => {
             onChange={handleChange}
           >
             <MenuItem value="TODO">TODO</MenuItem>
-            <MenuItem value="IN_PROGRESS">IN PROGRESS</MenuItem>
+            <MenuItem value="IN PROGRESS">IN PROGRESS</MenuItem>
             <MenuItem value="COMPLETED">COMPLETED</MenuItem>
           </Select>
           {/* <FormHelperText>{errors.priority}</FormHelperText> */}

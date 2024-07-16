@@ -8,8 +8,8 @@ import { useGetMyTasksMutation, useGetAllUsersMutation, useGetAllUserQuery } fro
 import { useSelector } from 'react-redux';
 import { RootState } from './redux/store';
 
-import { useDispatch } from 'react-redux';
 import { setIsLoading, setTasks , setUsers} from './redux/reducer'
+import { useDispatch } from 'react-redux';
 import { AppDispatch } from "./redux/store";
 import { ITask, IUser } from './pages/login';
 

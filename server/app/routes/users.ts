@@ -94,6 +94,7 @@ router.get("/demo",(req: Request, res: Response) => {
   //set the new password for newuser
   router.post(
     "/set-new-password/:token",
+    validate("set-new-password"),
     expressAsyncHandler(async (req: Request, res: Response): Promise<void> => {
       const { password, name } = req.body as IUser;
       console.log(req.body);

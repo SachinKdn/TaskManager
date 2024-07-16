@@ -7,10 +7,14 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from "../Layout";
 import './inviteUser.css';  // Import the CSS file
-import { useInviteUserMutation } from "../redux/api";
+import { useGetAllUserQuery, useInviteUserMutation } from "../redux/api";
 import { Slide, toast } from 'react-toastify';
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
+import { setUsers} from '../redux/reducer'
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from "../redux/store";
+import { Navigate } from "react-router-dom";
 
 interface IFormInput {
     email: string;
@@ -27,6 +31,9 @@ const inputSchema = yup.object().shape({
 
 
 const InviteUser : React.FC= () => {
+
+  const dispatch = useDispatch<AppDispatch>();
+  const  { data : allUsers, error, isLoading : isLoadingOfAllUsers , refetch } = useGetAllUserQuery("");
     const [inviteUser,  { data, isLoading }] = useInviteUserMutation();
 
     const {  reset } = useForm<IFormInput>({
@@ -48,13 +55,19 @@ const InviteUser : React.FC= () => {
       const onSubmit = async () => {
         console.log(newUser);
         const result = await inviteUser(newUser)
-          if(!result.error){
-            console.log(result.error);
-            console.log("error")
-          
+          if(!result.error){          
         console.log("Invitation successful:", result);
+        refetch();
+        if (!isLoadingOfAllUsers && allUsers) {
+          console.log("Users fetched from the onSubmit of inviteUser");
+          dispatch(setUsers({users: allUsers }))
+       }
+       setNewUser({
+        email: '',
+        role: 'USER',
+      });
         // reset({email: "",role:"USER"});
-        reset();
+        // reset();
         toast.success('🦄 Invitation mail sent successfully!!', {
           position: "top-right",
           autoClose: 3000,
